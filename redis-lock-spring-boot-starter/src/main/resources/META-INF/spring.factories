@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.jean.lock.redis.config.DistributedLockConfig,\
+com.jean.lock.redis.aop.DistributedLockAspect

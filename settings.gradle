@@ -1,0 +1,6 @@
+rootProject.name = 'distributed-lock'
+include 'distributed-lock-api'
+include 'redisson-lock-spring-boot-starter'
+include 'redis-lock-spring-boot-starter'
+include 'zookeeper-lock-spring-boot-starter'
+

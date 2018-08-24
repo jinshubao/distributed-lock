@@ -1,0 +1,5 @@
+dependencies {
+    compile project(":distributed-lock-api")
+    compile("org.springframework.boot:spring-boot-autoconfigure:${springBootVersion}")
+    compile("org.springframework.boot:spring-boot-starter-aop:${springBootVersion}")
+}
