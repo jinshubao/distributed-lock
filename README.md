@@ -39,7 +39,8 @@ public class OrderServiceImpl {
 
     @Override
     @Transactional
-    @DistributedLock(name = "buy_product", namePrefix = "lock", nameSuffix = "#param.productId+'_'+#param.userId", waitTime = 3L, timeout = 30L, timeUnit = TimeUnit.SECONDS, fallback = "buyProductFallback")
+    @DistributedLock(name = "buy_product", nameSuffix = "#param.productId+'_'+#param.userId")
+    //@DistributedLock(name = "buy_product", namePrefix = "lock", nameSuffix = "#param.productId+'_'+#param.userId", waitTime = 3L, timeout = 30L, timeUnit = TimeUnit.SECONDS, fallback = "buyProductFallback")
     public Order buyProduct(Object param) {
         //冻结用户账户余额
         //扣减商品库存
