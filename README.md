@@ -18,9 +18,10 @@
 - 使用redisson-lock-spring-boot-starter
 
     引入依赖
+    
     ```
     dependencies {
-        compile("com.jean:redisson-lock-spring-boot-starter:1.0-SNAPSHOT")
+        compile("com.jean:redisson-lock-spring-boot-starter:2.0-SNAPSHOT")
     }
     ```
     配置文件
@@ -35,19 +36,16 @@
         port: 6379
         database: 0
         password: 123456
-        pool:
-          min-idle: 1 #min-idle必须大于0
-          max-active: 8
-          max-idle: 8
-          max-wait: 1000
     ```
    > min-idle必须大于0
 
 - 使用使用redis-lock-spring-boot-starter
+
     引入依赖
+    
     ```
     dependencies {
-        compile("com.jean:redis-lock-spring-boot-starter:1.0-SNAPSHOT")
+        compile("com.jean:redis-lock-spring-boot-starter:2.0-SNAPSHOT")
     }
     ```
     配置文件
@@ -67,7 +65,7 @@
     引入依赖
     ```
     dependencies {
-        compile("com.jean:zookeeper-lock-spring-boot-starter:1.0-SNAPSHOT")
+        compile("com.jean:zookeeper-lock-spring-boot-starter:2.0-SNAPSHOT")
     }
     ```
     配置文件

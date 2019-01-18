@@ -1,5 +1,15 @@
+
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+
+
+jar {
+    enabled = true
+}
+
+
 dependencies {
     compile project(":distributed-lock-api")
-    compile("org.springframework.boot:spring-boot-autoconfigure:${springBootVersion}")
-    compile("org.springframework.boot:spring-boot-starter-aop:${springBootVersion}")
+    compile("org.springframework.boot:spring-boot-autoconfigure")
+    compile("org.springframework.boot:spring-boot-starter-aop")
 }
