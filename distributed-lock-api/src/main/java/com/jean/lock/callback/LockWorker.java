@@ -13,5 +13,5 @@ public interface LockWorker<T> {
      * @return
      * @throws Throwable
      */
-    T work() throws Throwable;
+    T work() ;
 }

@@ -12,10 +12,14 @@ import java.util.concurrent.locks.Lock;
  */
 public class RedisLock implements Lock {
 
-    private String name;
+    private final String name;
+    private final String key;
+    private final Object value;
 
-    public RedisLock(String name) {
+    public RedisLock(String name, String key, Object value) {
         this.name = name;
+        this.key = key;
+        this.value = value;
     }
 
     @Override
@@ -62,4 +66,15 @@ public class RedisLock implements Lock {
     public String getName() {
         return name;
     }
+
+
+    public String getKey() {
+        return key;
+    }
+
+
+    public Object getValue() {
+        return value;
+    }
+
 }

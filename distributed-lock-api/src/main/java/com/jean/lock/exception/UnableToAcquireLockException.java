@@ -6,7 +6,7 @@ package com.jean.lock.exception;
  * @author jinshubao
  * @create 2018/05/15
  */
-public class UnableToAcquireLockException extends Exception {
+public class UnableToAcquireLockException extends RuntimeException {
     public UnableToAcquireLockException() {
     }
 

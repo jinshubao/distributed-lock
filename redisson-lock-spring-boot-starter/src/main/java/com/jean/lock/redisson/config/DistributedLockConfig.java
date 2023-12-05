@@ -1,7 +1,5 @@
 package com.jean.lock.redisson.config;
 
-import com.jean.lock.manager.LockManager;
-import com.jean.lock.redisson.manager.RedissonLockManager;
 import com.jean.lock.redisson.template.RedissonLockTemplate;
 import com.jean.lock.template.LockTemplate;
 import org.redisson.Redisson;
@@ -73,15 +71,9 @@ public class DistributedLockConfig {
     }
 
     @Bean
-    @ConditionalOnMissingBean(LockManager.class)
-    LockManager<RLock> lockManager(RedissonClient redissonClient) {
-        return new RedissonLockManager(redissonClient);
-    }
-
-    @Bean
     @ConditionalOnMissingBean(LockTemplate.class)
-    LockTemplate<RLock> distributedLockTemplate(LockManager<RLock> lockManager) {
-        return new RedissonLockTemplate(lockManager);
+    LockTemplate<RLock> distributedLockTemplate(RedissonClient redissonClient) {
+        return new RedissonLockTemplate(redissonClient);
     }
 
 

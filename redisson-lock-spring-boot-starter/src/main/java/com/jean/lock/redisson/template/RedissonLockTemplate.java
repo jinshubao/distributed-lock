@@ -2,9 +2,9 @@ package com.jean.lock.redisson.template;
 
 import com.jean.lock.callback.LockWorker;
 import com.jean.lock.exception.UnableToAcquireLockException;
-import com.jean.lock.manager.LockManager;
 import com.jean.lock.template.LockTemplate;
 import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,49 +21,45 @@ public class RedissonLockTemplate implements LockTemplate<RLock> {
 
     private static final Logger logger = LoggerFactory.getLogger(RedissonLockTemplate.class);
 
-    private LockManager<RLock> lockLockManager;
 
-    public RedissonLockTemplate(LockManager<RLock> lockLockManager) {
-        this.lockLockManager = lockLockManager;
+    private RedissonClient redissonClient;
+
+    public RedissonLockTemplate(RedissonClient redissonClient) {
+        this.redissonClient = redissonClient;
     }
 
 
     @Override
-    public <R> R lock(String lockName, long timeout, TimeUnit timeUnit, LockWorker<R> lockWorker) throws Throwable {
-        RLock lock = lockLockManager.getLock(lockName);
-        return lock(lock, timeout, timeUnit, lockWorker);
-    }
-
-    @Override
-    public <R> R lock(RLock lock, long timeout, TimeUnit timeUnit, LockWorker<R> lockWorker) throws Throwable {
-        long start = System.currentTimeMillis();
-        lock.lock(timeout, timeUnit);
+    public <R> R lock(String lockName, long timeout, TimeUnit timeUnit, LockWorker<R> lockWorker) {
+        RLock lock = redissonClient.getLock(lockName);
         try {
-            logger.debug("lock success [{}] {} ms", lock.getName(), System.currentTimeMillis() - start);
+            lock.lock(timeout, timeUnit);
             return lockWorker.work();
         } finally {
-            lockLockManager.unlock(lock);
-        }
-    }
-
-    @Override
-    public <R> R tryLock(String lockName, long waitTime, long timeout, TimeUnit timeUnit, LockWorker<R> lockWorker) throws Throwable {
-        RLock lock = lockLockManager.getLock(lockName);
-        return tryLock(lock, waitTime, timeout, timeUnit, lockWorker);
-    }
-
-    @Override
-    public <R> R tryLock(RLock lock, long waitTime, long timeout, TimeUnit timeUnit, LockWorker<R> lockWorker) throws Throwable {
-        long start = System.currentTimeMillis();
-        boolean locked = lock.tryLock(waitTime, timeout, timeUnit);
-        if (locked) {
-            try {
-                logger.debug("try lock success [{}], {} ms", lock.getName(), (System.currentTimeMillis() - start));
-                return lockWorker.work();
-            } finally {
-                lockLockManager.unlock(lock);
+            if (lock.isLocked()) {
+                lock.unlock();
             }
         }
-        throw new UnableToAcquireLockException("try lock failed [" + lock.getName() + "]");
+    }
+
+    @Override
+    public <R> R tryLock(String lockName, long waitTime, long timeout, TimeUnit timeUnit, LockWorker<R> lockWorker) {
+        RLock lock = redissonClient.getLock(lockName);
+        boolean locked;
+        try {
+            locked = lock.tryLock(waitTime, timeout, timeUnit);
+        } catch (InterruptedException e) {
+            throw new UnableToAcquireLockException(e);
+        }
+        if (!locked) {
+            throw new UnableToAcquireLockException("try lock failed [" + lock.getName() + "]");
+        }
+        try {
+            return lockWorker.work();
+        } finally {
+            if (lock.isLocked()) {
+                lock.unlock();
+            }
+        }
     }
 }

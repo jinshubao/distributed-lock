@@ -1,5 +1,9 @@
 buildscript {
     repositories {
+        maven {
+            url 'https://maven.aliyun.com/repository/public/'
+        }
+        mavenLocal()
         mavenCentral()
     }
 
@@ -15,6 +19,10 @@ allprojects {
     version '2.0-SNAPSHOT'
 
     repositories {
+        maven {
+            url 'https://maven.aliyun.com/repository/public/'
+        }
+        mavenLocal()
         mavenCentral()
     }
 }
@@ -46,20 +54,6 @@ subprojects {
 
                 artifact sourceJar {
                     classifier "sources"
-                }
-            }
-        }
-        repositories {
-            maven {
-                if (project.version.endsWith('-SNAPSHOT')) {
-                    url = "http://127.0.0.1:8081/repository/maven-snapshots/"
-                } else {
-                    url = "http://127.0.0.1:8081/repository/maven-releases/"
-                }
-
-                credentials {
-                    username 'admin'
-                    password ''
                 }
             }
         }

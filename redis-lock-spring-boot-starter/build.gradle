@@ -13,5 +13,5 @@ dependencies {
     compile("org.springframework.boot:spring-boot-autoconfigure")
     compile("org.springframework.boot:spring-boot-starter-aop")
     compile("org.springframework.boot:spring-boot-starter-data-redis")
-    testCompile("junit:junit:4.12")
+    testCompile("junit:junit:4.13.1")
 }
